@@ -12,6 +12,7 @@ if(ENABLE_CUDA)
         saxpy.cu
     )
     add_executable(saxpy ${SRC})
+    target_compile_options(saxpy PRIVATE $<$<COMPILE_LANGUAGE:CUDA>:${CUDA_FLAGS}>) 
 endif()
 
 if(ENABLE_HIP)
