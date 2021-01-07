@@ -15,8 +15,8 @@ int main( int argc, char** argv )
 {
   if( argc < 2 )
   {
-	std::cout << "Usage: " << argv[0] << " <buffer size in MB>" << std::endl;
-	exit( 1 );
+    std::cout << "Usage: " << argv[0] << " <buffer size in MB>" << std::endl;
+    exit( 1 );
   }
   unsigned int N = (1 << 20) * atoi( argv[1] );  // Buffer size
 
