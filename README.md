@@ -1,3 +1,3 @@
-# saxpy-cuda
+# saxpy-example
 
-Simple SAXPY computation example in CUDA.
+Simple SAXPY computation example in CUDA, Hip, and OneAPI.
