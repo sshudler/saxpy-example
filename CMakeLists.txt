@@ -12,7 +12,9 @@ if(ENABLE_CUDA)
         saxpy.cu
     )
     add_executable(saxpy ${SRC})
-    target_compile_options(saxpy PRIVATE $<$<COMPILE_LANGUAGE:CUDA>:${CUDA_FLAGS}>) 
+    target_compile_options(saxpy PRIVATE $<$<COMPILE_LANGUAGE:CUDA>:${CUDA_FLAGS}>)
+
+    install(TARGETS saxpy DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
 endif()
 
 if(ENABLE_HIP)
