@@ -21,7 +21,6 @@ if(ENABLE_CUDA)
         saxpy.cu
     )
     cuda_add_executable(saxpy-cuda ${SRC})
-    target_compile_options(saxpy-cuda PRIVATE $<$<COMPILE_LANGUAGE:CUDA>:${CUDA_FLAGS}>)
 
     install(TARGETS saxpy-cuda DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
 endif()
