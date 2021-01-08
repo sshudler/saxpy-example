@@ -6,26 +6,33 @@ set(CMAKE_VERBOSE_MAKEFILE ON)
 
 if(ENABLE_CUDA)
     message("Using CUDA")
-    enable_language(CUDA)
 
-    if(NOT DEFINED CMAKE_CUDA_ARCHITECTURES)
-        set(CMAKE_CUDA_ARCHITECTURES OFF)
+    if(NOT DEFINED CUDA_TOOLKIT_ROOT_DIR)
+        message(FATAL_ERROR "CUDA root directory should be specified in CUDA_TOOLKIT_ROOT_DIR.")
+    endif()
+    find_package(CUDA QUIET)
+    if(CUDA_FOUND)
+        message(STATUS "Found CUDA: " ${CUDA_VERSION})
+    else()
+        message(FATAL_ERROR "Could not find CUDA. Ensure that CUDA_TOOLKIT_ROOT_DIR points to the right location.")
     endif()
 
     set(SRC
         saxpy.cu
     )
-    add_executable(saxpy-cuda ${SRC})
+    cuda_add_executable(saxpy-cuda ${SRC})
     target_compile_options(saxpy-cuda PRIVATE $<$<COMPILE_LANGUAGE:CUDA>:${CUDA_FLAGS}>)
 
     install(TARGETS saxpy-cuda DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
 endif()
 
 if(ENABLE_HIP)
-    # HIP options
     message("Using HIP")
-    set(HIP_PATH $ENV{ROCM_PATH} CACHE PATH "Path to which HIP has been installed")
-    set(CMAKE_MODULE_PATH "${HIP_PATH}/cmake" ${CMAKE_MODULE_PATH})
+
+    if(NOT DEFINED HIP_ROOT_DIR)
+        message(FATAL_ERROR "HIP directory should be specified in HIP_ROOT_DIR.")
+    endif()
+    set(CMAKE_MODULE_PATH "${HIP_ROOT_DIR}/cmake" ${CMAKE_MODULE_PATH})
     find_package(HIP QUIET)
     if(HIP_FOUND)
         message(STATUS "Found HIP: " ${HIP_VERSION})
