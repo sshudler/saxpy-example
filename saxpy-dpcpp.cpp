@@ -19,8 +19,10 @@ int main( int argc, char** argv )
   std::vector<float> x_v( N );
   std::vector<float> y_v( N );
 
-  std::fill( x.begin(), x.end(), 1.0 );
-  std::fill( y.begin(), y.end(), 2.0 );
+  std::fill( x_v.begin(), x_v.end(), 1.0 );
+  std::fill( y_v.begin(), y_v.end(), 2.0 );
+
+  float value = 2.0f;
 
   sycl::gpu_selector d_selector;
 
@@ -37,10 +39,10 @@ int main( int argc, char** argv )
     sycl::range n_items{ N };
 
     q.submit([&](auto &h) {
-      sycl::accessor x_acc( x_buff, h, sycl::write_only, sycl::noinit );
-      sycl::accessor y_acc( y_buff, h, sycl::write_only, sycl::noinit );
+      sycl::accessor x_acc( x_buff, h, sycl::read_only, sycl::noinit );
+      sycl::accessor y_acc( y_buff, h, sycl::read_write, sycl::noinit );
 
-      h.parallel_for( n_items, [=](auto i) {   });
+      h.parallel_for( n_items, [=](auto i) { y_acc[i] = value * x_acc[i] + y_acc[i];  });
     });
   }
   catch( std::exception const &e  )
