@@ -18,7 +18,7 @@ if(ENABLE_CUDA)
     endif()
 
     set(SRC
-        saxpy.cu
+        saxpy-cuda.cu
     )
     cuda_add_executable(saxpy-cuda ${SRC})
 
@@ -40,7 +40,7 @@ if(ENABLE_HIP)
     endif()
 
     set(SRC
-        saxpy.cpp
+        saxpy-hip.cpp
     )
     set_source_files_properties(${SRC} PROPERTIES HIP_SOURCE_PROPERTY_FORMAT 1)
     hip_add_executable(saxpy-hip ${SRC})
@@ -49,5 +49,14 @@ if(ENABLE_HIP)
 endif()
 
 if(ENABLE_ONEAPI)
-    # OneAPI options
+    message("Using OneAPI")
+
+    set(SRC
+        saxpy-dpcpp.cpp
+    )
+    set(CMAKE_CXX_COMPILER "dpcpp")
+    set(CMAKE_CXX_STANDARD 17)
+    add_executable(saxpy-dpcpp ${SRC})
+
+    install(TARGETS saxpy-dpcpp DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
 endif()
